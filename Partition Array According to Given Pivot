@@ -1,0 +1,35 @@
+class Solution {
+    public int[] pivotArray(int[] nums, int pivot) {
+        int n = nums.length;
+        int l = 0, m = 0, h = 0;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] < pivot) {
+                l++;
+            }
+            if (nums[i] == pivot) {
+                m++;
+            }
+            if (nums[i] > pivot) {
+                h++;
+            }
+        }
+        int low[] = new int[l];
+        int mid[] = new int[m];
+        int high[] = new int[h];
+        int j = 0, k = 0, g = 0;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] < pivot) {
+                low[j++] = nums[i];
+            } else if (nums[i] > pivot) {
+                high[k++] = nums[i];
+            } else {
+                mid[g++] = nums[i];
+            }
+        }
+        int re[] = new int[n];
+        System.arraycopy(low, 0, re, 0, low.length);
+        System.arraycopy(mid, 0, re, low.length, mid.length);
+        System.arraycopy(high, 0, re, mid.length+low.length, high.length);  
+        return re;
+    }
+}
