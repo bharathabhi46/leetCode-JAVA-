@@ -1,0 +1,27 @@
+class Solution {
+    public static void PermutationString(int nums[], int index, List<List<Integer>> re){
+        if(index==nums.length){
+            List<Integer> per = new ArrayList<>();
+            for(int i=0;i<nums.length;i++){
+                per.add(nums[i]);
+            }
+            re.add(per);
+            return;        
+        }
+        for(int i=index;i<nums.length;i++){
+            swp(nums, index, i);
+            PermutationString(nums, index+1, re);
+            swp(nums, index,i);
+        }
+    }
+    public static void swp(int nums[], int i, int j){
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> re = new ArrayList<>();
+        PermutationString(nums, 0, re);
+        return re;
+    }
+}
