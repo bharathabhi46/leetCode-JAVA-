@@ -1,0 +1,26 @@
+class Solution {
+    public List<List<Integer>> findSubsequences(int[] nums) {
+        int n = nums.length;
+        Set<List<Integer>> list2 = new HashSet<>();
+        for(int i=0;i<(1<<n);i++){
+            boolean valid =true;
+            List<Integer> list1 = new ArrayList<>();
+             int p = Integer.MIN_VALUE;
+            for(int j=0;j<n;j++){
+                if((i&(1<<j))!=0){
+                    if(nums[j]<p){
+                        valid = false;
+                        break;
+                    }else{
+                        list1.add(nums[j]);
+                        p=nums[j];
+                    }
+                }
+            }
+            if(valid && list1.size()>=2){
+            list2.add(list1);
+            }
+        }
+        return new ArrayList<>(list2);
+    }
+}
