@@ -1,0 +1,27 @@
+class Solution {
+    public static void solvePer(int nums[], Set<List<Integer>> list1, int index){
+        List<Integer> list2 = new ArrayList<>();
+        if(index == nums.length){
+            for(int i=0;i<nums.length;i++){
+                list2.add(nums[i]);
+            }
+            list1.add(list2);
+            return;
+        }
+        for(int i=index;i<nums.length;i++){
+        swap(nums, i, index);
+        solvePer(nums, list1, index+1);
+        swap(nums, i, index);
+        }
+    }
+    public static void swap(int nums[], int i, int j){
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        Set<List<Integer>>list1 = new HashSet<>();
+        solvePer(nums, list1, 0);
+        return new ArrayList<>(list1);
+    }
+}
