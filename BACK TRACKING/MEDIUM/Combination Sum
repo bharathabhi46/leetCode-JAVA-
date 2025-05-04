@@ -1,0 +1,21 @@
+class Solution {
+    public static void solveCombinations(int candidates[], int target, List<List<Integer>> result,List<Integer> cur, int index){
+        if(target==0){
+            result.add(new ArrayList<>(cur));
+            return;
+        }
+        if(target<0 || index>=candidates.length){
+            return;
+        }
+        cur.add(candidates[index]);
+        solveCombinations(candidates, target-candidates[index], result,cur,index);
+        cur.remove(cur.size()-1);
+        solveCombinations(candidates, target, result, cur, index + 1);
+    }
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> cur = new ArrayList<>();
+        solveCombinations(candidates, target, result, cur, 0);
+        return result;
+    }
+}
