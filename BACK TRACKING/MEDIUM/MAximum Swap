@@ -1,0 +1,53 @@
+class Solution {
+    static String max;
+
+    public static String MaxNum(char[] arr, String old, int k) {
+        max = old;
+        solveMax(arr, 0, k);
+        return max;
+    }
+
+    public static void solveMax(char[] arr, int index, int k) {
+        if (k == 0 || index >= arr.length) return;
+
+        int n = arr.length;
+
+        // Step 1: Find the maximum digit from index to end
+        char maxDigit = arr[index];
+        for (int i = index + 1; i < n; i++) {
+            if (arr[i] > maxDigit) {
+                maxDigit = arr[i];
+            }
+        }
+
+        // Step 2: If a larger digit exists to the right, attempt swap
+        if (maxDigit != arr[index]) {
+            for (int i = n - 1; i > index; i--) {
+                if (arr[i] == maxDigit) {
+                    swap(arr, i, index);
+                    String cur = new String(arr);
+                    if (cur.compareTo(max) > 0) {
+                        max = cur;
+                    }
+                    solveMax(arr, index + 1, k - 1); // Only 1 swap allowed, so decrement k
+                    swap(arr, i, index); // backtrack
+                    break; // Only the first valid swap should be considered
+                }
+            }
+        } else {
+            solveMax(arr, index + 1, k); // move forward if no better swap
+        }
+    }
+
+    public static void swap(char[] arr, int i, int j) {
+        char temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public int maximumSwap(int num) {
+        String old = String.valueOf(num);
+        char[] arr = old.toCharArray();
+        return Integer.parseInt(MaxNum(arr, old, 1)); // One swap allowed
+    }
+}
