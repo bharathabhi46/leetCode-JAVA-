@@ -1,0 +1,30 @@
+class Solution {
+    static Boolean memo[][];
+    public static boolean solveSum(int nums[], int target, int index, int sum){
+        if(sum==target){
+            return true;
+        }
+        if(sum>target || index == nums.length){
+            return false;
+        }
+        if(memo[index][sum]!=null){
+            return memo[index][sum];
+        }
+        boolean in = solveSum(nums, target, index+1, sum+nums[index]);
+        boolean ex= solveSum(nums, target, index+1, sum);
+        memo[index][sum] = in || ex;
+        return memo[index][sum];
+    }
+    public boolean canPartition(int[] nums) {
+        int c=0;
+        for(int i=0;i<nums.length;i++){
+            c+=nums[i];
+        }
+        if(c%2!=0){
+            return false;
+        }
+        int target = c/2;
+        memo = new Boolean[nums.length][target+1];
+        return solveSum(nums, target, 0,0);
+    }
+}
