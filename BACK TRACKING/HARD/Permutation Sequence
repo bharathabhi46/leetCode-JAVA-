@@ -1,0 +1,37 @@
+class Solution {
+    static List<String> Permutations = new ArrayList<>();
+    static int c=0;
+    public static void solvePer(char arr[], int k, int index) {
+        if (index == arr.length) {
+            Permutations.add(new String(arr));
+            c++;
+            return;
+        }
+        for (int i = index; i < arr.length; i++) {
+            // if(c>=k){
+            //     return;
+            // }
+            swap(arr, i, index);
+            solvePer(arr, k, index + 1);
+            swap(arr, i, index);
+        }
+    }
+    public static void swap(char arr[], int i, int j) {
+        char temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    public String getPermutation(int n, int k) {
+        Permutations.clear();
+        c=0;
+        String s = "";
+        for (int i = 1; i <= n; i++) {
+            s += i;
+        }
+        char arr[] = s.toCharArray();
+        // Arrays.sort(arr);
+        solvePer(arr, k, 0);
+        Collections.sort(Permutations);
+        return Permutations.get(k - 1);
+    }
+}
