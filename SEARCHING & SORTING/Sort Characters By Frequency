@@ -1,0 +1,20 @@
+class Solution {
+    public String frequencySort(String s) {
+        HashMap<Character, Integer> fre = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            fre.put(c, fre.getOrDefault(c, 0) + 1);
+        }
+        List<Character> charac = new ArrayList<>(fre.keySet());
+        Collections.sort(charac, (a, b) -> {
+            return fre.get(b) - fre.get(a);
+        });
+        StringBuilder str = new StringBuilder();
+        for (char num : charac) {
+            int count = fre.get(num);
+            for (int i = 0; i < count; i++) {
+                str.append(num);
+            }
+        }
+        return str.toString();
+    }
+}
