@@ -1,0 +1,19 @@
+class Solution {
+    public int findPairs(int[] nums, int k) {
+        HashSet<Integer> set = new HashSet<>();
+        HashSet<Integer> visitSet = new HashSet<>();
+        int c = 0;
+        for(int num : nums){
+            if(set.contains(num-k) && !visitSet.contains(num-k)){
+                c++;
+                visitSet.add(num-k);
+            }
+            if(set.contains(num+k) && !visitSet.contains(num)){
+                c++;
+                visitSet.add(num);
+            }
+            set.add(num);
+        }
+        return c;
+    }
+}
