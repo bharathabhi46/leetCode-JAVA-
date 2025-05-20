@@ -1,0 +1,52 @@
+class Solution {
+     class Node{
+        String data;
+        Node next;
+        Node(String data){
+            this.data = data;
+            this.next = null;
+        }
+    }
+     class Stack{
+        Node head = null;
+        public  boolean isEmpty(){
+            return head==null;
+        }
+        public  void add(String data){
+            Node newNode = new Node(data);
+            if(isEmpty()){
+                head = newNode;
+                return;
+            }
+            newNode.next = head;
+            head = newNode;
+        }
+        public  void remove(){
+            if(isEmpty()){
+                return;
+            }
+            head = head.next;
+        }
+        public  String buildStr(){
+            StringBuilder stri = new StringBuilder();
+            Node cur = head;
+            while(cur!=null){
+                stri.insert(0, cur.data);
+                cur = cur.next;
+            }
+            return stri.toString();
+        }
+    }
+    public String clearDigits(String s) {
+        Stack sta = new Stack();
+        char arr[] = s.toCharArray();
+        for (char ch : arr) {
+            if (Character.isLetter(ch)) {
+                sta.add(String.valueOf(ch));
+            } else if (Character.isDigit(ch)) {
+                sta.remove();
+            }
+        }
+        return sta.buildStr();
+    }
+}
