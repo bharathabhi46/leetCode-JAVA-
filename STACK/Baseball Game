@@ -1,0 +1,77 @@
+class Solution {
+    static class Node {
+        int data;
+        Node next;
+
+        Node(int data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+
+    class ImplementStack {
+        Node head;
+
+        public boolean isEmpty() {
+            return head == null;
+        }
+
+        public void push(int data) {
+            Node newNode = new Node(data);
+            newNode.next = head;
+            head = newNode;
+        }
+
+        public int pop() {
+            if (isEmpty()) {
+                return 0;
+            }
+            int top = head.data;
+            head = head.next;
+            return top;
+        }
+
+        public int peek() {
+            if (isEmpty()) {
+                return 0;
+            }
+            return head.data;
+        }
+
+        public int[] getTwoTop() {
+            if (head == null || head.next == null) {
+                return new int[]{0, 0};
+            }
+            return new int[]{head.data, head.next.data};
+        }
+
+        public int getSum() {
+            int sum = 0;
+            Node cur = head;
+            while (cur != null) {
+                sum += cur.data;
+                cur = cur.next;
+            }
+            return sum;
+        }
+    }
+
+    public int calPoints(String[] operations) {
+        ImplementStack s = new ImplementStack();
+
+        for (String op : operations) {
+            if (op.equals("C")) {
+                s.pop();
+            } else if (op.equals("D")) {
+                s.push(2 * s.peek());
+            } else if (op.equals("+")) {
+                int[] topTwo = s.getTwoTop();
+                s.push(topTwo[0] + topTwo[1]);
+            } else {
+                s.push(Integer.parseInt(op));
+            }
+        }
+
+        return s.getSum();
+    }
+}
