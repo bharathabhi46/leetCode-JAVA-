@@ -1,0 +1,60 @@
+class Solution {
+    class Node {
+        char data;
+        Node next;
+
+        Node(char data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+
+    class Stack {
+        Node head = null;
+
+        public boolean isEmpty() {
+            return head == null;
+        }
+
+        public void add(char data) {
+            Node newNode = new Node(data);
+            if (isEmpty()) {
+                head = newNode;
+                return;
+            }
+            newNode.next = head;
+            head = newNode;
+        }
+
+        public void remove() {
+            if (isEmpty()) {
+                return;
+            }
+            head = head.next;
+        }
+
+        public char peek() {
+            if (isEmpty()) {
+                return '\0';
+            }
+            return head.data;
+        }
+    }
+
+    public String removeDuplicates(String s) {
+        Stack sta = new Stack();
+        for (char ch : s.toCharArray()) {
+            if (ch != sta.peek()) {
+                sta.add(ch);
+            } else {
+                sta.remove();
+            }
+        }
+        StringBuilder str = new StringBuilder();
+        while (!sta.isEmpty()) {
+            str.append(sta.peek());
+            sta.remove();
+        }
+        return str.reverse().toString();
+    }
+}
