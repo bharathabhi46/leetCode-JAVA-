@@ -1,0 +1,25 @@
+class Solution {
+    public int timeRequiredToBuy(int[] tickets, int k) {
+        Queue<Integer> q = new LinkedList<>();
+        for(int t : tickets){
+            q.offer(t);
+        }
+        int time = 0;
+        int pos = k;
+        while(true){
+            int cur = q.poll();
+            cur--;
+            time++;
+            if(pos==0 && cur==0){
+                return time;
+            }
+            if(cur>0){
+                q.offer(cur);
+            }
+            pos--;
+            if(pos<0){
+                pos = q.size()-1;
+            }
+        }
+    }
+}
