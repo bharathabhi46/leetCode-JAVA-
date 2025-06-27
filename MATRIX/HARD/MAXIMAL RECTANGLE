@@ -1,0 +1,83 @@
+
+import java.util.*;
+
+class MaximalRec {
+
+    public static int solveRec(int h[]) {
+        int l = h.length;
+        int left[] = new int[l];
+        int right[] = new int[l];
+        Stack<Integer> s = new Stack<>();
+
+        // Calculate left[]
+        for (int i = 0; i < l; i++) {
+            while (!s.isEmpty() && h[s.peek()] >= h[i]) {
+                s.pop();
+            }
+            if (s.isEmpty()) {
+                left[i] = -1;
+            } else {
+                left[i] = s.peek();
+            }
+            s.push(i);
+        }
+
+        s.clear();
+
+        // Calculate right[]
+        for (int i = l - 1; i >= 0; i--) {
+            while (!s.isEmpty() && h[s.peek()] >= h[i]) {
+                s.pop();
+            }
+            if (s.isEmpty()) {
+                right[i] = l;
+            } else {
+                right[i] = s.peek();
+            }
+            s.push(i);
+        }
+
+        // Calculate max area
+        int maxArea = 0;
+        for (int i = 0; i < l; i++) {
+            int w = right[i] - left[i] - 1;
+            int a = h[i] * w;
+            maxArea = Math.max(a, maxArea);
+        }
+        return maxArea;
+    }
+
+    public static int maximalRectangle(char[][] matrix) {
+        if (matrix.length == 0) {
+            return 0;
+        }
+        int n = matrix.length;
+        int m = matrix[0].length;
+        int h[] = new int[m];
+        int re = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (matrix[i][j] == '1') {
+                    h[j] += 1;
+                } else {
+                    h[j] = 0;
+                }
+            }
+            re = Math.max(re, solveRec(h));
+        }
+        return re;
+    }
+
+    public static void main(String[] args) {
+        char[][] matrix = {
+            {'0', '1', '1', '0'},
+            {'1', '1', '1', '1'},
+            {'1', '1', '1', '1'},
+            {'1', '1', '0', '0'}
+        };
+
+        int result = maximalRectangle(matrix);
+        System.out.println("Maximum rectangle area of 1's: " + result);
+    }
+}
