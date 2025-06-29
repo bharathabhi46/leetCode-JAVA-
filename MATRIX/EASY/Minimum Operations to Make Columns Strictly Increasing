@@ -1,0 +1,17 @@
+class Solution {
+    public int minimumOperations(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        int c = 0;
+        for(int i=1;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i-1][j]>=grid[i][j]){
+                    int add = grid[i-1][j] - grid[i][j] + 1;
+                    grid[i][j] = grid[i][j] + add;
+                    c+=add;
+                }
+            }
+        }
+        return c;
+    }
+}
