@@ -1,0 +1,66 @@
+class Solution {
+    public class Node{
+        Node children[];
+        boolean eow = false;
+        public Node(){
+            children = new Node[26];
+            for(int i=0;i<26;i++){
+                children[i] = null;
+            }
+            eow = false;
+        }
+    }
+    public void insert(String word, Node root){
+        Node cur = root;
+        for(int i=0;i<word.length();i++){
+            int ind = word.charAt(i) - 'a';
+            if(cur.children[ind] == null){
+                cur.children[ind] = new Node();
+            }
+            if(i==word.length()-1){
+                cur.children[ind].eow = true;
+            }
+            cur = cur.children[ind];
+        }
+    }
+    public boolean search(String word, Node root){
+        Node cur = root;
+        for(int i=0;i<word.length();i++){
+            int ind = word.charAt(i) - 'a';
+            Node node = cur.children[ind];
+            if(node == null){
+                return false;
+            }
+            if(i==word.length() - 1 && cur.children[ind].eow==false){
+                return false;
+            }
+            cur = cur.children[ind];
+        }
+        return true;
+    }
+    public boolean wB(String word,Node root, HashMap<String, Boolean> map){
+        if(word.length() == 0){
+            return true;
+        }
+        if(map.containsKey(word)){
+            return map.get(word);
+        }
+        for(int i=1;i<=word.length();i++){
+            String fP = word.substring(0,i);
+            String sP = word.substring(i,word.length());
+            if(search(fP, root) && wB(sP, root, map)){
+                map.put(word, true);
+                return true;
+            }
+        }
+        map.put(word, false);
+        return false;
+    }
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Node root = new Node();
+        for(int i=0;i<wordDict.size();i++){
+            insert(wordDict.get(i), root);
+        }
+        return wB(s, root, new HashMap<>());
+    }
+}
