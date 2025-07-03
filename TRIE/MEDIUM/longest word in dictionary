@@ -1,0 +1,47 @@
+class Solution {
+    public class Node{
+        Node children[];
+        boolean eow;
+        public Node(){
+            children = new Node[26];
+            eow = false;
+        }
+    }
+    public void insert(String word, Node root){
+        Node cur = root;
+        for(int i=0;i<word.length();i++){
+            int ind = word.charAt(i) - 'a';
+            if(cur.children[ind] == null){
+                cur.children[ind] = new Node();
+            }
+            if(i == word.length()-1){
+                cur.children[ind].eow = true;
+            }
+            cur = cur.children[ind];
+        }
+    }
+    String s= "";
+    public void LongestWord(StringBuilder t, Node root){
+        if(root == null){
+            return;
+        }
+        for(int i=0;i<26;i++){
+            if(root.children[i]!=null && root.children[i].eow == true){
+                t.append((char)(i+'a'));
+                if(s.length()<t.length()){
+                    s = t.toString();
+                }
+                LongestWord(t, root.children[i]);
+                t.deleteCharAt(t.length() - 1);
+            }
+        }
+    }
+    public String longestWord(String[] words) {
+        Node root = new Node();
+        for(int i=0;i<words.length;i++){
+            insert(words[i], root);
+        }
+        LongestWord(new StringBuilder(""), root);
+        return s;
+    }
+}
