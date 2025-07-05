@@ -1,0 +1,71 @@
+class Solution {
+    List<String> re = new ArrayList<>();
+    StringBuilder str = new StringBuilder();
+
+    public class Node {
+        Node children[];
+        boolean eow;
+        public Node() {
+            children = new Node[26];
+            for (int i = 0; i < 26; i++) {
+                children[i] = null;
+            }
+            eow = false;
+        }
+    }
+
+    public void insert(String word, Node root) {
+        Node cur = root;
+        for (int i = 0; i < word.length(); i++) {
+            int ind = word.charAt(i) - 'a';
+            if (cur.children[ind] == null) {
+                cur.children[ind] = new Node();
+            }
+            cur = cur.children[ind];
+        }
+        cur.eow = true;
+    }
+
+    public boolean search(String word, Node root) {
+        Node cur = root;
+        for (int i = 0; i < word.length(); i++) {
+            int ind = word.charAt(i) - 'a';
+            Node node = cur.children[ind];
+            if (node == null) {
+                return false;
+            }
+            cur = node;
+        }
+        return cur.eow;
+    }
+
+    public void wB(String s, Node root) {
+        if (s.length() == 0) {
+            re.add(str.toString());
+            return;
+        }
+
+        for (int i = 1; i <= s.length(); i++) {
+            String fP = s.substring(0, i);
+            String sP = s.substring(i, s.length());
+            if (search(fP, root)) {
+                int len = str.length();
+                if (len != 0) str.append(" ");
+                str.append(fP);
+
+                wB(sP, root); 
+
+                str.setLength(len);
+            }
+        }
+    }
+
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        Node root = new Node();
+        for (int i = 0; i < wordDict.size(); i++) {
+            insert(wordDict.get(i), root);
+        }
+        wB(s, root);
+        return re;
+    }
+}
