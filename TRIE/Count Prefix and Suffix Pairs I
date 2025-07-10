@@ -1,0 +1,67 @@
+class Solution {
+    public class Node {
+        Node[] children;
+        boolean eow;
+
+        public Node() {
+            children = new Node[26];
+            eow = false;
+        }
+    }
+
+    public void insert(String s, Node root) {
+        Node cur = root;
+        for (int i = 0; i < s.length(); i++) {
+            int ind = s.charAt(i) - 'a';
+            if (cur.children[ind] == null) {
+                cur.children[ind] = new Node();
+            }
+            cur = cur.children[ind];
+        }
+        cur.eow = true;
+    }
+
+    public boolean searchPrefix(String s, Node root) {
+        Node cur = root;
+        for (int i = 0; i < s.length(); i++) {
+            int ind = s.charAt(i) - 'a';
+            if (cur.children[ind] == null) {
+                return false;
+            }
+            cur = cur.children[ind];
+        }
+        return true; // prefix check
+    }
+
+    public int countPrefixSuffixPairs(String[] words) {
+        int c = 0;
+
+        for (int i = 0; i < words.length; i++) {
+            for (int j = i + 1; j < words.length; j++) {
+                Node prefixRoot = new Node();
+                Node suffixRoot = new Node();
+
+                // insert words[j] into prefix trie
+                insert(words[j], prefixRoot);
+
+                // insert reversed words[j] into suffix trie
+                StringBuilder sb = new StringBuilder(words[j]);
+                sb.reverse();
+                insert(sb.toString(), suffixRoot);
+
+                // check prefix
+                boolean isPrefix = searchPrefix(words[i], prefixRoot);
+
+                // check suffix
+                StringBuilder siRev = new StringBuilder(words[i]);
+                siRev.reverse();
+                boolean isSuffix = searchPrefix(siRev.toString(), suffixRoot);
+
+                if (isPrefix && isSuffix) {
+                    c++;
+                }
+            }
+        }
+        return c;
+    }
+}
