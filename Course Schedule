@@ -1,0 +1,76 @@
+import java.util.*;
+
+public class Solution {
+
+    public static class Edge {
+        int dt;
+
+        public Edge(int d) {
+            this.dt = d;
+        }
+    }
+
+    public static void createGraph(ArrayList<Edge> graph[], int arr[][]) {
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<Edge>();
+        }
+        for (int a[] : arr) {
+            int s = a[0];
+            int d = a[1];
+            graph[s].add(new Edge(d));
+        }
+    }
+
+    public static boolean dfs(ArrayList<Edge> graph[], boolean vis[], boolean rec[], int cur) {
+        vis[cur] = true;
+        rec[cur] = true;
+
+        for (int i = 0; i < graph[cur].size(); i++) {
+            Edge e = graph[cur].get(i);
+            if (rec[e.dt] == true) {
+                return true; // cycle detected
+            } else if (!vis[e.dt]) {
+                if (dfs(graph, vis, rec, e.dt)) {
+                    return true;
+                }
+            }
+        }
+
+        rec[cur] = false;
+        return false;
+    }
+
+    public static boolean canFinish(int numCourses, int[][] prerequisites) {
+        int n = numCourses;
+        ArrayList<Edge> graph[] = new ArrayList[n];
+        createGraph(graph, prerequisites);
+        boolean[] vis = new boolean[n];
+        boolean[] rec = new boolean[n];
+
+        for (int i = 0; i < n; i++) {
+            if (!vis[i]) {
+                if (dfs(graph, vis, rec, i)) {
+                    return false; // cycle found, cannot finish all courses
+                }
+            }
+        }
+        return true; // no cycle, can finish all courses
+    }
+
+    public static void main(String[] args) {
+        int numCourses = 5;
+        int[][] prerequisites = {
+            {0, 2},
+            {0, 3},
+            {0, 1},
+            {1, 0},
+            {2, 0},
+            {2, 4},
+            {3, 0},
+            {4, 2}
+        };
+
+        boolean result = canFinish(numCourses, prerequisites);
+        System.out.println("Can finish all courses: " + result);
+    }
+}
