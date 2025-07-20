@@ -1,0 +1,85 @@
+class Solution {
+    public class Edge {
+        int dt;
+
+        public Edge(int d) {
+            this.dt = d;
+        }
+    }
+
+    public void createGraph(ArrayList<Edge> graph[], int arr[][], int n) {
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList<Edge>();
+        }
+        for (int i = 0; i < arr.length; i++) {
+            int a = arr[i][0];
+            int b = arr[i][1];
+            graph[a].add(new Edge(b)); // b -> a
+        }
+    }
+
+    public void dfs(ArrayList<Edge> graph[], boolean vis[], Stack<Integer> s, int cur) {
+        vis[cur] = true;
+        for (int i = 0; i < graph[cur].size(); i++) {
+            Edge e = graph[cur].get(i);
+            if (vis[e.dt] == false) {
+                dfs(graph, vis, s, e.dt);
+            }
+        }
+        s.push(cur);
+    }
+
+    public boolean dfsCycle(ArrayList<Edge> graph[], boolean vis[], boolean rec[], int cur) {
+        vis[cur] = true;
+        rec[cur] = true;
+        for (int i = 0; i < graph[cur].size(); i++) {
+            Edge e = graph[cur].get(i);
+            if (rec[e.dt] == true) {
+                return true;
+            }
+            if (vis[e.dt] == false) {
+                if (dfsCycle(graph, vis, rec, e.dt)) {
+                    return true;
+                }
+            }
+        }
+        rec[cur] = false;
+        return false;
+    }
+
+    public void topsort(ArrayList<Edge> graph[], boolean vis[], int arr[], int n) {
+        Stack<Integer> s = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            if (vis[i] == false) {
+                dfs(graph, vis, s, i);
+            }
+        }
+        int ind = 0;
+        List<Integer> re = new ArrayList<>();
+        while (!s.isEmpty()) {
+            re.add(0, s.pop());
+        }
+        for (int i = 0; i < re.size(); i++) {
+            arr[ind++] = re.get(i);
+        }
+    }
+
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        int n = numCourses;
+        ArrayList<Edge> graph[] = new ArrayList[n];
+        createGraph(graph, prerequisites, n);
+        boolean vis[] = new boolean[n];
+        boolean rec[] = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            if (vis[i] == false) {
+                if (dfsCycle(graph, vis, rec, i)) {
+                    return new int[] {};
+                }
+            }
+        }
+        int arr[] = new int[n];
+        vis = new boolean[n];
+        topsort(graph, vis, arr, n);
+        return arr;
+    }
+}
