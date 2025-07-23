@@ -1,0 +1,51 @@
+class Solution {
+    static class Edge {
+        int dt;
+        int wt;
+
+        public Edge(int d, int w) {
+            this.dt = d;
+            this.wt = w;
+        }
+    }
+
+    public static void createGraph(ArrayList<Edge> graph[], int[][] edges) {
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        for (int i = 0; i < edges.length; i++) {
+            int s = edges[i][0];
+            int d = edges[i][1];
+            int w = edges[i][2];
+            graph[s].add(new Edge(d, w));
+        }
+    }
+
+    public int bF(ArrayList<Edge> graph[], int n, int t, int src, int dst) {
+        int dest[] = new int[n];
+        Arrays.fill(dest, Integer.MAX_VALUE);
+        dest[src] = 0;
+        for (int i = 0; i <= t; i++) {
+             int[] temp = Arrays.copyOf(dest, n);
+
+            for (int u = 0; u < n; u++) {
+                for (Edge e : graph[u]) {
+                    int v = e.dt;
+                    int w = e.wt;
+                    if (dest[u] != Integer.MAX_VALUE && dest[u] + w < temp[v]) {
+                        temp[v] = dest[u] + w;
+                    }
+                }
+            }
+
+            dest = temp;
+        }
+        return dest[dst] == Integer.MAX_VALUE ? -1 : dest[dst];
+    }
+
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        ArrayList<Edge> graph[] = new ArrayList[n];
+        createGraph(graph, flights);
+        return bF(graph, n, k, src, dst);
+    }
+}
