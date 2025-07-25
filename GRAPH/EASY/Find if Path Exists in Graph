@@ -1,0 +1,40 @@
+class Solution {
+    public class Edge{
+        int dt;
+        public Edge(int d){
+            this.dt = d;
+        }
+    }
+    public void createGraph(ArrayList<Edge> graph[], int V, int arr[][]){
+        for(int i=0;i<V;i++){
+            graph[i] = new ArrayList<Edge>();
+        }
+        for(int i=0;i<arr.length;i++){
+            int s = arr[i][0];
+            int d = arr[i][1];
+            graph[s].add(new Edge(d));
+            graph[d].add(new Edge(s));
+        }
+    }
+    public boolean dfs(ArrayList<Edge> graph[], boolean vis[], int cur, int dest){
+        vis[cur] = true;
+        if(cur==dest){
+            return true;
+        }
+        for(int i=0;i<graph[cur].size();i++){
+            Edge e = graph[cur].get(i);
+            if(!vis[e.dt]){
+                if(dfs(graph, vis, e.dt, dest)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean validPath(int n, int[][] edges, int source, int destination) {
+        ArrayList<Edge> graph[] = new ArrayList[n];
+        createGraph(graph, n, edges);
+        boolean vis[] = new boolean[n];
+        return dfs(graph, vis, source, destination);
+    }
+}
