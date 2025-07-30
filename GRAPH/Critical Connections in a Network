@@ -1,0 +1,66 @@
+import java.util.*;
+
+class Solution {
+
+    static class Edge {
+        int dest;
+        public Edge(int d) {
+            this.dest = d;
+        }
+    }
+
+    public void createGraph(ArrayList<Edge>[] graph, int V, List<List<Integer>> connections) {
+        for (int i = 0; i < V; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        for (List<Integer> conn : connections) {
+            int s = conn.get(0);
+            int d = conn.get(1);
+            graph[s].add(new Edge(d));
+            graph[d].add(new Edge(s));
+        }
+    }
+
+    public void dfs(ArrayList<Edge>[] graph, boolean[] vis, int cur, int[] dt, int[] low, int time, int par, List<List<Integer>> result) {
+        vis[cur] = true;
+        dt[cur] = low[cur] = ++time;
+
+        for (Edge e : graph[cur]) {
+            if (e.dest == par) continue;
+
+            if (!vis[e.dest]) {
+                dfs(graph, vis, e.dest, dt, low, time, cur, result);
+                low[cur] = Math.min(low[cur], low[e.dest]);
+
+                if (dt[cur] < low[e.dest]) {
+                    result.add(Arrays.asList(cur, e.dest));
+                }
+            } else {
+                low[cur] = Math.min(low[cur], dt[e.dest]);
+            }
+        }
+    }
+
+    public void getBridges(ArrayList<Edge>[] graph, int V, List<List<Integer>> result) {
+        boolean[] vis = new boolean[V];
+        int[] dt = new int[V];
+        int[] low = new int[V];
+        int time = 0;
+
+        for (int i = 0; i < V; i++) {
+            if (!vis[i]) {
+                dfs(graph, vis, i, dt, low, time, -1, result);
+            }
+        }
+    }
+
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+        ArrayList<Edge>[] graph = new ArrayList[n];
+        createGraph(graph, n, connections);
+
+        List<List<Integer>> result = new ArrayList<>();
+        getBridges(graph, n, result);
+
+        return result;
+    }
+}
