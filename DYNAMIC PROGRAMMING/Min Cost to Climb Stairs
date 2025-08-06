@@ -1,0 +1,59 @@
+// space optimization
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        int n = cost.length;
+        int prev2 = cost[0];
+        int prev1 = cost[1];
+
+        for (int i = 2; i < n; i++) {
+            int curr = cost[i] + Math.min(prev1, prev2);
+            prev2 = prev1;
+            prev1 = curr;
+        }
+
+        return Math.min(prev1, prev2);
+    }
+}
+// tabulation 
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        int n = cost.length;
+        int[] dp = new int[n];
+
+        dp[0] = cost[0];
+        dp[1] = cost[1];
+
+        for (int i = 2; i < n; i++) {
+            dp[i] = cost[i] + Math.min(dp[i - 1], dp[i - 2]);
+        }
+
+        // The last step can be either from n-1 or n-2
+        return Math.min(dp[n - 1], dp[n - 2]);
+    }
+}
+// recursion + memoization 
+class Solution {
+    static int dp[];
+    public int climb(int cost[], int i){
+        if(i<0){
+            return 0;
+        }
+        if(dp[i]!=-1){
+            return dp[i];
+        }
+        int o = cost[i] + climb(cost, i-1);
+        int t = cost[i] + climb(cost, i-2);
+        dp[i] = Math.min(o, t);
+        return dp[i];
+    }
+    public int minCostClimbingStairs(int[] cost) {
+        int n = cost.length;
+        dp = new int[n+1];
+        for(int i=0;i<n;i++){
+            dp[i] = -1;
+        }
+        int f = climb(cost, n-1);
+        int s = climb(cost, n-2);
+        return Math.min(f,s);
+    }
+}
