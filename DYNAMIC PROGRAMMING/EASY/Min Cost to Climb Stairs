@@ -1,4 +1,4 @@
-// space optimization
+// SPACE OPTIMIZATION
 class Solution {
     public int minCostClimbingStairs(int[] cost) {
         int n = cost.length;
@@ -14,7 +14,7 @@ class Solution {
         return Math.min(prev1, prev2);
     }
 }
-// tabulation 
+// TABULATION
 class Solution {
     public int minCostClimbingStairs(int[] cost) {
         int n = cost.length;
@@ -31,7 +31,7 @@ class Solution {
         return Math.min(dp[n - 1], dp[n - 2]);
     }
 }
-// recursion + memoization 
+// RECURSION + MEMOIZATION
 class Solution {
     static int dp[];
     public int climb(int cost[], int i){
