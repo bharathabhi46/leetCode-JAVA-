@@ -27,7 +27,6 @@ class Solution {
             dp[i] = cost[i] + Math.min(dp[i - 1], dp[i - 2]);
         }
 
-        // The last step can be either from n-1 or n-2
         return Math.min(dp[n - 1], dp[n - 2]);
     }
 }
