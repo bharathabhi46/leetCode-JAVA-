@@ -1,0 +1,75 @@
+// RECURSION + MEMOIZATION
+class Solution {
+    int dp[][];
+    public int mC(int arr[], int k, int n){
+        if(n==0){
+            if(k%arr[n]==0){
+                return k/arr[n];
+            }else{
+                return Integer.MAX_VALUE;
+            }
+        }
+        if(dp[n][k]!=-1){
+            return dp[n][k];
+        }
+        int nT = 0 + mC(arr, k, n-1);
+        int T = Integer.MAX_VALUE;
+        if(arr[n]<=k){
+             int res = mC(arr, k - arr[n], n);
+                if(res != Integer.MAX_VALUE){
+                    T = 1 + res;
+                }
+        }
+        return dp[n][k] = Math.min(nT, T);
+    }
+    public int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        dp = new int[n][amount+1];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<=amount;j++){
+                dp[i][j] = -1;
+            }
+        }
+        int ans = mC(coins, amount, n-1);
+        if(ans == Integer.MAX_VALUE){
+            return -1;
+        }else{
+            return ans;
+        }
+    }
+}
+// TABULATION
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        int[][] dp = new int[n][amount + 1];
+        for (int t = 0; t <= amount; t++) {
+            if (t % coins[0] == 0) dp[0][t] = t / coins[0];
+            else dp[0][t] = (int)1e9;
+        }
+        for (int i = 1; i < n; i++) {
+            for (int t = 0; t <= amount; t++) {
+                int nT = dp[i - 1][t];
+                int T = (int)1e9;
+                if (coins[i] <= t) T = 1 + dp[i][t - coins[i]];
+                dp[i][t] = Math.min(nT, T);
+            }
+        }
+        return dp[n - 1][amount] >= (int)1e9 ? -1 : dp[n - 1][amount];
+    }
+}
+
+// SPACE OPTIMIZATION
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, (int)1e9);
+        dp[0] = 0;
+        for (int coin : coins) {
+            for (int t = coin; t <= amount; t++) {
+                dp[t] = Math.min(dp[t], 1 + dp[t - coin]);
+            }
+        }
+        return dp[amount] >= (int)1e9 ? -1 : dp[amount];
+    }
+}
