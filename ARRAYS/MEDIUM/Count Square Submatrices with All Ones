@@ -1,0 +1,35 @@
+class Solution {
+    public int countSquares(int[][] matrix) {
+        int n = matrix.length;
+        int m = matrix[0].length;
+        int l = Math.min(m, n);
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (matrix[i][j] == 1) {
+                    count++;
+                }
+            }
+        }
+       int maxSide = Math.min(n, m);
+        for (int size = 2; size <= maxSide; size++) {
+            for (int i = 0; i + size <= n; i++) {
+                for (int j = 0; j + size <= m; j++) {
+                    boolean allOnes = true;
+                    for (int p = i; p < i + size; p++) {
+                        for (int q = j; q < j + size; q++) {
+                            if (matrix[p][q] == 0) {
+                                allOnes = false;
+                                break;
+                            }
+                        }
+                        if (!allOnes) break;
+                    }
+                    if (allOnes) count++;
+                }
+            }
+        }
+
+        return count;
+    }
+}
