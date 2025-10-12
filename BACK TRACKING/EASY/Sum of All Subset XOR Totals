@@ -1,0 +1,17 @@
+class Solution {
+    static int sum;
+    public void f(int n, int nums[], int ind, int re){
+        if(ind == n){
+            sum+=re;
+            return;
+        }
+        f(n, nums, ind+1, re^nums[ind]);
+        f(n, nums, ind+1, re);
+    }
+    public int subsetXORSum(int[] nums) {
+        int n = nums.length;
+        sum = 0;
+        f(n, nums, 0, 0);
+        return sum;
+    }
+}
