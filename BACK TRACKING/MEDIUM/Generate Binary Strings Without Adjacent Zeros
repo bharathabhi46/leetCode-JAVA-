@@ -1,0 +1,22 @@
+class Solution {
+    public void f(int n, StringBuilder str, List<String> re){
+        if(str.length() == n){
+            re.add(str.toString());
+            return;
+        }
+        if(str.length() == 0 || str.charAt(str.length()-1)!='0'){
+            str.append('0');
+            f(n, str, re);
+            str.deleteCharAt(str.length() - 1);
+        }
+        str.append('1');
+        f(n, str, re);
+        str.deleteCharAt(str.length() - 1);
+    }
+    public List<String> validStrings(int n) {
+        StringBuilder str = new StringBuilder();
+        List<String> re = new ArrayList<>();
+        f(n, str, re);
+        return re;
+    }
+}
