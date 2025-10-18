@@ -9,7 +9,9 @@ class Solution {
         if(ind == n || k<0){
             return;
         }
+// USING LOOP < TWO RECURSIVE CALLS REDUCE SOME ITERATIONS AND EASY TO CHECK THE DUPLICATES
         for (int i = ind; i < n; i++) {
+(I>IND) - > IT ADD THE DUPLCATE ELEMENTS BUT DONT NOT INCLUDE AGAIN THESE ELEMETN IN ANOTHER LIST
             if (i > ind && arr[i] == arr[i - 1]) continue;
             if (arr[i] > k) break;
             l.add(arr[i]);
