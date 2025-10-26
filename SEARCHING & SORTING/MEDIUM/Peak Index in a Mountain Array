@@ -1,0 +1,24 @@
+class Solution {
+    public int f(int arr[], int n){
+        int l = 0;
+        int h = n-1;
+        int ind = 0;
+        while(l<=h){
+            int m = (l+h)/2;
+            if(arr[m]<arr[m+1]){
+                l=m+1;
+                ind = m;
+            }else if(arr[m-1]>arr[m]){
+                h=m-1;
+                ind = m;
+            }else{
+                return m;
+            }
+        }
+        return ind;
+    }
+    public int peakIndexInMountainArray(int[] arr) {
+        int n = arr.length;
+        return f(arr, n);
+    }
+}
