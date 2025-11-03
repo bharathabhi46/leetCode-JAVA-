@@ -1,0 +1,31 @@
+class Solution {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        HashSet<Integer> set = new HashSet<>();
+        int n1 = nums1.length;
+        int n2 = nums2.length;
+        for(int i=0;i<n1;i++){
+            set.add(nums1[i]);
+        }
+        int a[] = new int[n1];
+        HashMap<Integer, Integer> map = new HashMap<>();
+        Stack<Integer> s = new Stack<>();
+        for(int i=n2-1;i>=0;i--){
+            int cur = nums2[i];
+            if(set.contains(nums2[i])){
+                while(!s.isEmpty() && s.peek()<=cur){
+                    s.pop();
+                }
+                if(s.isEmpty()){
+                    map.put(cur, -1);
+                }else{
+                    map.put(cur, s.peek());                  
+                }
+            }
+            s.push(cur);
+        }
+        for (int i = 0; i < n1; i++) {
+            a[i] = map.get(nums1[i]);
+        }
+        return a;
+    }
+}
