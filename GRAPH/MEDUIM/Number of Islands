@@ -1,0 +1,94 @@
+// 8 ways
+class Solution {
+    public class Pair{
+        int r;
+        int c;
+        public Pair(int r, int c){
+            this.r = r;
+            this.c = c;
+        }
+    }
+    public void bfs(char grid[][], boolean vis[][], int row, int col, int n, int m){
+        vis[row][col] = true;
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(row, col));
+        while(!q.isEmpty()){
+            Pair p = q.remove();
+            int f = p.r;
+            int s = p.c;
+            for(int i=-1;i<=1;i++){
+                for(int j=-1;j<=1;j++){
+                    int nrow = f + i;
+                    int ncol = s + j;
+                    if(nrow>=0 && nrow < n && ncol>=0 && ncol< m && grid[nrow][ncol]=='1' && vis[nrow][ncol]==false){
+                        vis[nrow][ncol] = true;
+                        q.add(new Pair(nrow, ncol));
+                    }
+                }
+            }
+        }
+    }
+    public int numIslands(char[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        boolean vis[][] = new boolean[n][m];
+        int c = 0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(vis[i][j]==false && grid[i][j] == '1'){
+                    c++;
+                    bfs(grid, vis, i, j, n, m);
+                }
+            }
+        }
+        return c;
+    }
+// 4ways
+class Solution {
+    public class Pair{
+        int r;
+        int c;
+        public Pair(int r, int c){
+            this.r = r;
+            this.c = c;
+        }
+    }
+    public void bfs(char grid[][], boolean vis[][], int row, int col, int n, int m, int uL[], int dL[]){
+        vis[row][col] = true;
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(row, col));
+        while(!q.isEmpty()){
+            Pair p = q.remove();
+            int f = p.r;
+            int s = p.c;
+            for(int i=0;i<4;i++){
+               
+                    int nrow = uL[i] + f;
+                    int ncol = dL[i] + s;
+                    if(nrow>=0 && nrow < n && ncol>=0 && ncol< m && grid[nrow][ncol]=='1' && vis[nrow][ncol]==false){
+                        vis[nrow][ncol] = true;
+                        q.add(new Pair(nrow, ncol));
+                    }
+                
+            }
+        }
+    }
+    public int numIslands(char[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        boolean vis[][] = new boolean[n][m];
+        int c = 0;
+        int uL[] = {1, 0, -1, 0};
+        int dL[] = {0, -1, 0 , 1};
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(vis[i][j]==false && grid[i][j] == '1'){
+                    c++;
+                    bfs(grid, vis, i, j, n, m, uL, dL);
+                }
+            }
+        }
+        return c;
+    }
+}
+}
