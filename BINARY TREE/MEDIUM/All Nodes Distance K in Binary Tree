@@ -1,0 +1,54 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean ancestor(TreeNode root, TreeNode s, List<TreeNode> l){
+        if(root == null){
+            return false;
+        }
+        if(root == s || ancestor(root.left, s, l) || ancestor(root.right, s, l)){
+            l.add(root);
+            return true;
+        }
+        return false;
+    }
+    public void gC(TreeNode root, int k, List<Integer> re){
+        if(root == null){
+            return;
+        }
+        if(k==0){
+            re.add(root.val);
+            return;
+        }
+        gC(root.left, k-1, re);
+        gC(root.right, k-1, re);
+    }
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        List<TreeNode> l = new ArrayList<>();
+        List<Integer> re = new ArrayList<>();
+        ancestor(root, target, l);
+        int ans = 0;
+        gC(target, k, re);
+        for(int i=1;i<l.size();i++){
+            if(i==k){
+                re.add(l.get(i).val);
+                break;
+            }
+            if(k-i-1<0){
+                break;
+            }
+            if(l.get(i).left == l.get(i-1)){
+                gC(l.get(i).right, k-i-1, re);
+            }else{
+                gC(l.get(i).left, k-i-1, re);
+            }
+        }
+        return re;
+    }
+}
