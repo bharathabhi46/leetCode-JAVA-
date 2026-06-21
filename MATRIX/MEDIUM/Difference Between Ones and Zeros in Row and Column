@@ -12,7 +12,7 @@ class Solution {
                     if (grid[i][j] == 0) {
                     zR[i]++;
                     } else {
-                    oR[i]++;
+                    oR[i]++;/////////
                 }
             }
         }
