@@ -1,0 +1,96 @@
+class Solution {
+    public static int f2(String s, char x, char y, int n) {
+        int c1 = 0;
+        int c2 = 0;
+        int max = 0;
+        // HashMap<Integer, Integer> map = new HashMap<>();
+        HashMap<Integer, Integer> map = new HashMap<>(n * 2);
+        map.put(0, -1);
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) != x && s.charAt(i) != y) {
+                // map.clear(); // it is expensive
+                map = new HashMap<>();
+                map.put(0, i);
+                c1 = 0;
+                c2 = 0;
+                continue;
+            }
+            char ch = s.charAt(i); // multiple checks also expensive -> if(s.charAt(i) = x)
+
+            if (ch == x)
+                c1++;
+            else if (ch == y)
+                c2++;
+            int d = c1 - c2;
+            Integer prev = map.putIfAbsent(d, i); // default map.containsKeys() also is expensive
+            if (prev != null) {
+                max = Math.max(max, i - prev);
+            }
+        }
+        return max;
+    }
+
+    public static int f3(String s, char x, char y, char z, int n) {
+        int c1 = 0;
+        int c2 = 0;
+        int c3 = 0;
+        int max = 0;
+        // HashMap<String, Integer> map = new HashMap<>();
+        // HashMap<Long,Integer> map = new HashMap<>();
+        HashMap<Long, Integer> map = new HashMap<>(n * 2);
+        map.put(0L, -1);
+        for (int i = 0; i < n; i++) {
+
+            char ch = s.charAt(i);
+
+            if (ch == x)
+                c1++;
+            else if (ch == y)
+                c2++;
+            else
+                c3++;
+            int d1 = c1 - c2;
+            int d2 = c1 - c3;
+            // String sT = d1 + "#" + d2;
+            long key = (((long) d1) << 32) | (d2 & 0xffffffffL);
+            // if (map.containsKey(sT)) {
+            //     max = Math.max(max, i - map.get(sT));
+            // } else {
+            //     map.put(sT, i);
+            // }
+            Integer prev = map.putIfAbsent(key, i);
+            if (prev != null) {
+                max = Math.max(max, i - prev);
+            }
+        }
+        return max;
+    }
+
+    public int longestBalanced(String s) {
+        int n = s.length();
+        if (n == 0) {
+            return 0;
+        }
+        int max = 0;
+        // case - 1;
+        int c = 1;
+        for (int i = 1; i < n; i++) {
+            if (s.charAt(i - 1) == s.charAt(i)) {
+                c++;
+            } else {
+                max = Math.max(max, c);
+                c = 1;
+            }
+        }
+        max = Math.max(max, c);
+
+        // case - 2
+        max = Math.max(max, f2(s, 'a', 'b', n));
+        max = Math.max(max, f2(s, 'a', 'c', n));
+        max = Math.max(max, f2(s, 'b', 'c', n));
+
+        // case - 3
+        max = Math.max(max, f3(s, 'a', 'b', 'c', n));
+        return max;
+    }
+}
