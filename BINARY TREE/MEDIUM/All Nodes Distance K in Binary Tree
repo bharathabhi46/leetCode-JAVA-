@@ -49,6 +49,6 @@ class Solution {
                 gC(l.get(i).left, k-i-1, re);
             }
         }
-        return re;
+        return re;;
     }
 }
